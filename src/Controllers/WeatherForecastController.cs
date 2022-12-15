@@ -26,7 +26,7 @@ public class WeatherForecastController : ControllerBase
     public IEnumerable<WeatherForecast> Get()
     {
         var locationSettings = _locationSettingsOptions.Value;
-        var coordinates = locationSettings.Coordinates.Split(',').Select(Double.Parse);
+        var coordinates = locationSettings.Coordinates.Split(',').Select(double.Parse);
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateTime.Now.AddDays(index),
