@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -26,7 +27,9 @@ public class WeatherForecastController : ControllerBase
     public IEnumerable<WeatherForecast> Get()
     {
         var locationSettings = _locationSettingsOptions.Value;
-        var coordinates = locationSettings.Coordinates.Split(',').Select(double.Parse);
+        var coordinates = locationSettings.Coordinates.Split(',')
+            .Select(s => double.Parse(s, CultureInfo.InvariantCulture))
+            .ToList();
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateTime.Now.AddDays(index),
