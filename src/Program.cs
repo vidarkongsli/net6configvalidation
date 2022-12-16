@@ -1,6 +1,8 @@
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using src;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,8 +14,15 @@ services.AddOptions<LocationSettings>()
     .Bind(builder.Configuration.GetSection(nameof(LocationSettings)))
     .ValidateDataAnnotations()
     .ValidateOnStart();
+    
+services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        builder.Configuration.Bind(options.GetType().Name, options);   
+    });
 
 var app = builder.Build();
+app.UseAuthentication();
 app.MapControllers();
 app.Map("/", () =>
 {
