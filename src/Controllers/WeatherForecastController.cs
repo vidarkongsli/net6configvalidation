@@ -26,6 +26,7 @@ public class WeatherForecastController : ControllerBase
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
+        _logger.LogInformation("Creating forecast");
         var locationSettings = _locationSettingsOptions.Value;
         var coordinates = locationSettings.Coordinates.Split(',')
             .Select(s => double.Parse(s, CultureInfo.InvariantCulture))

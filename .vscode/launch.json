@@ -20,7 +20,8 @@
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "APPLICATIONINSIGHTS_CONNECTION_STRING": "InstrumentationKey=bb0f7ab0-0fe8-472c-8597-a3dc293f54d1;IngestionEndpoint=https://norwayeast-0.in.applicationinsights.azure.com/;LiveEndpoint=https://norwayeast.livediagnostics.monitor.azure.com/"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"

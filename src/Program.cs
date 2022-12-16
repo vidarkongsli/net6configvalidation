@@ -1,19 +1,34 @@
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Extensions.Options;
 using src;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddOptions<LocationSettings>()
+var services = builder.Services;
+services.AddApplicationInsightsTelemetry();
+services.AddControllers();
+services.AddOptions<LocationSettings>()
     .Bind(builder.Configuration.GetSection(nameof(LocationSettings)))
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
 var app = builder.Build();
-
 app.MapControllers();
-app.Map("/", () => "OK");
+app.Map("/", () =>
+{
+    app.Logger.LogInformation("Answering 'OK'");
+    return "OK";
+});
 
-app.Run();
+try
+{
+    app.Run();
+}
+catch (OptionsValidationException e)
+{
+    var sp = builder.Services.BuildServiceProvider();
+    var telemetryClient = sp.GetRequiredService<TelemetryClient>();
+    telemetryClient.TrackException(e);
+    telemetryClient.Flush();
+}
