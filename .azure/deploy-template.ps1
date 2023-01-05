@@ -10,8 +10,8 @@ param (
     [Parameter(Mandatory = $false)]
     [ValidateScript({ Test-Path $_ -PathType Leaf })]
     $templateFile = "$PSScriptRoot\deployment.bicep",
-    [Parameter(Mandatory = $false)]
-    $subscription = '0e39107c-468f-41a4-a1ce-231f97cf4944'
+    [Parameter(Mandatory)]
+    $subscription
 )
 $appName = 'net6confval'
 $resourceGroup = "$appName-$environment"
